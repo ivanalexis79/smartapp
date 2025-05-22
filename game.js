@@ -18,18 +18,62 @@ function createBlocks() {
         blocks.push({
             x: 150 + Math.random() * 100 - 50, // Efecto isométrico
             y: 250 - i * 20, // Apilamiento
-            width: 30,
-            height: 30
+            size: 30
         });
     }
 }
 
-// Dibuja los bloques en la perspectiva isométrica
+// Dibuja un cubo en perspectiva isométrica
+function drawIsoCube(x, y, size) {
+    ctx.strokeStyle = "#000"; // Bordes negros
+
+    // Calculamos los puntos para la perspectiva isométrica
+    let topX = x + size / 2;
+    let topY = y - size / 2;
+    let rightX = x + size;
+    let rightY = y;
+    let bottomX = x + size / 2;
+    let bottomY = y + size / 2;
+
+    // Dibujamos la cara frontal (roja)
+    ctx.fillStyle = "#ff4d4d";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(topX, topY);
+    ctx.lineTo(rightX, rightY);
+    ctx.lineTo(bottomX, bottomY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Dibujamos la cara lateral (oscura)
+    ctx.fillStyle = "#cc0000";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(bottomX, bottomY);
+    ctx.lineTo(x, y + size);
+    ctx.lineTo(x - size / 2, y + size / 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Dibujamos la cara superior (más clara)
+    ctx.fillStyle = "#ff6666";
+    ctx.beginPath();
+    ctx.moveTo(topX, topY);
+    ctx.lineTo(rightX, rightY);
+    ctx.lineTo(rightX - size / 2, rightY + size / 2);
+    ctx.lineTo(bottomX, bottomY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+// Renderiza todos los cubos en pantalla
 function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     blocks.forEach(block => {
-        ctx.fillStyle = "red";
-        ctx.fillRect(block.x, block.y, block.width, block.height);
+        drawIsoCube(block.x, block.y, block.size);
     });
 }
 
