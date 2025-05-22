@@ -6,7 +6,7 @@ canvas.height = 500;
 let blocks = [];
 let blockCount = 0;
 let score = 0;
-let timeLeft = 5;
+let timeLeft = 15;
 let gameRunning = false;
 let timerInterval;
 
