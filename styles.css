@@ -12,6 +12,11 @@ canvas {
     border: 2px solid white;
 }
 
+p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
 input, button {
     font-size: 18px;
     margin: 10px;
