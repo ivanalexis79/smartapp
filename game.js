@@ -8,35 +8,39 @@ let blockCount = 0;
 let score = 0;
 let timeLeft = 5;
 let gameRunning = false;
+let timerInterval;
 
-// Genera bloques en espacio isométrico
-function createBlock() {
-    let block = {
-        x: 150 + Math.random() * 100 - 50, // Efecto isométrico
-        y: 250 - blockCount * 20, // Apilamiento
-        width: 30,
-        height: 30
-    };
-    blocks.push(block);
-    blockCount++;
+// Función para generar un número aleatorio de bloques (entre 6 y 18)
+function createBlocks() {
+    blocks = []; // Limpia bloques anteriores
+    blockCount = Math.floor(Math.random() * 13) + 6; // Número aleatorio
+    for (let i = 0; i < blockCount; i++) {
+        blocks.push({
+            x: 150 + Math.random() * 100 - 50, // Efecto isométrico
+            y: 250 - i * 20, // Apilamiento
+            width: 30,
+            height: 30
+        });
+    }
 }
 
-// Dibuja bloques en una perspectiva isométrica
+// Dibuja los bloques en la perspectiva isométrica
 function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     blocks.forEach(block => {
         ctx.fillStyle = "red";
         ctx.fillRect(block.x, block.y, block.width, block.height);
     });
 }
 
-// Temporizador de 5 segundos
+// Temporizador de 5 segundos con sincronización
 function startTimer() {
     timeLeft = 5;
     document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
 
-    let timerInterval = setInterval(() => {
+    if (timerInterval) clearInterval(timerInterval); // Evita múltiples temporizadores
+
+    timerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
 
@@ -48,15 +52,10 @@ function startTimer() {
     }, 1000);
 }
 
-// Inicia el juego con bloques aleatorios
+// Inicia una nueva ronda del juego
 function startGame() {
-    //return;
     gameRunning = true;
-    blocks = [];
-    blockCount = Math.floor(Math.random() * 13) + 6; // Entre 6 y 18 bloques
-    for (let i = 0; i < blockCount; i++) {
-        createBlock();
-    }
+    createBlocks();
     drawBlocks();
     startTimer();
 }
@@ -74,6 +73,7 @@ document.getElementById("checkAnswer").addEventListener("click", function() {
     } else {
         document.getElementById("result").innerText = "Incorrecto. ¡Juego terminado!";
         gameRunning = false;
+        clearInterval(timerInterval);
     }
 });
 
