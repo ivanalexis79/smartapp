@@ -5,49 +5,76 @@ canvas.height = 500;
 
 let blocks = [];
 let blockCount = 0;
+let score = 0;
+let timeLeft = 5;
+let gameRunning = false;
 
-// Genera bloques aleatorios que caen
+// Genera bloques en espacio isométrico
 function createBlock() {
     let block = {
-        x: Math.random() * (canvas.width - 30),
-        y: 0,
+        x: 150 + Math.random() * 100 - 50, // Efecto isométrico
+        y: 250 - blockCount * 20, // Apilamiento
         width: 30,
-        height: 30,
-        speed: 2
+        height: 30
     };
     blocks.push(block);
     blockCount++;
 }
 
-// Actualiza posición de los bloques
-function updateBlocks() {
+// Dibuja bloques en una perspectiva isométrica
+function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     blocks.forEach(block => {
-        block.y += block.speed;
         ctx.fillStyle = "red";
         ctx.fillRect(block.x, block.y, block.width, block.height);
     });
-
-    blocks = blocks.filter(block => block.y < canvas.height);
 }
 
-// Bucle de juego
-function gameLoop() {
-    if (Math.random() < 0.05) { // Probabilidad de que aparezca un nuevo bloque
+// Temporizador de 5 segundos
+function startTimer() {
+    timeLeft = 5;
+    document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
+
+    let timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            gameRunning = false;
+            document.getElementById("result").innerText = "¡Tiempo agotado! Juego terminado.";
+        }
+    }, 1000);
+}
+
+// Inicia el juego con bloques aleatorios
+function startGame() {
+    gameRunning = true;
+    blocks = [];
+    blockCount = Math.floor(Math.random() * 13) + 6; // Entre 6 y 18 bloques
+    for (let i = 0; i < blockCount; i++) {
         createBlock();
     }
-    updateBlocks();
-    requestAnimationFrame(gameLoop);
+    drawBlocks();
+    startTimer();
 }
 
 // Verifica la respuesta del usuario
 document.getElementById("checkAnswer").addEventListener("click", function() {
+    if (!gameRunning) return;
+
     let userGuess = parseInt(document.getElementById("userInput").value);
-    document.getElementById("result").innerText = userGuess === blockCount
-        ? "¡Correcto! 🎉"
-        : "Incorrecto. Inténtalo de nuevo.";
+    if (userGuess === blockCount) {
+        score++;
+        document.getElementById("score").innerText = `Puntos: ${score}`;
+        document.getElementById("result").innerText = "¡Correcto! 🚀 Nueva ronda...";
+        startGame();
+    } else {
+        document.getElementById("result").innerText = "Incorrecto. ¡Juego terminado!";
+        gameRunning = false;
+    }
 });
 
-// Inicia el juego
-gameLoop();
+// Inicia la primera ronda
+startGame();
