@@ -33,9 +33,9 @@ function drawBlocks() {
     });
 }
 
-// Temporizador de 5 segundos con sincronización
+// Temporizador de 15 segundos con sincronización
 function startTimer() {
-    timeLeft = 5;
+    timeLeft = 15;
     document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
 
     if (timerInterval) clearInterval(timerInterval); // Evita múltiples temporizadores
