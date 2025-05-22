@@ -50,7 +50,7 @@ function startTimer() {
 
 // Inicia el juego con bloques aleatorios
 function startGame() {
-    return;
+    //return;
     gameRunning = true;
     blocks = [];
     blockCount = Math.floor(Math.random() * 13) + 6; // Entre 6 y 18 bloques
