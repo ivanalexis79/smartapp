@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+}
+
+canvas {
+    background-color: #333;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid white;
+}
+
+input, button {
+    font-size: 18px;
+    margin: 10px;
+    padding: 10px;
+}
