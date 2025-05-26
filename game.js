@@ -10,32 +10,27 @@ let timeLeft = 15;
 let gameRunning = false;
 let timerInterval;
 
-// Función para generar un número aleatorio de bloques (entre 6 y 18)
+// Genera bloques aleatorios
 function createBlocks() {
-    blocks = []; // Limpia bloques anteriores
-    blockCount = Math.floor(Math.random() * 13) + 6; // Número aleatorio
+    blocks = [];
+    blockCount = Math.floor(Math.random() * 13) + 6; 
     for (let i = 0; i < blockCount; i++) {
         blocks.push({
-            x: 150 + Math.random() * 100 - 50, // Efecto isométrico
-            y: 250 - i * 20, // Apilamiento
+            x: 150 + Math.random() * 100 - 50, 
+            y: 250 - i * 20, 
             size: 30
         });
     }
 }
 
-// Dibuja un cubo en perspectiva isométrica
+// Dibuja un cubo isométrico
 function drawIsoCube(x, y, size) {
-    ctx.strokeStyle = "#000"; // Bordes negros
+    ctx.strokeStyle = "#000";
 
-    // Calculamos los puntos para la perspectiva isométrica
-    let topX = x + size / 2;
-    let topY = y - size / 2;
-    let rightX = x + size;
-    let rightY = y;
-    let bottomX = x + size / 2;
-    let bottomY = y + size / 2;
+    let topX = x + size / 2, topY = y - size / 2;
+    let rightX = x + size, rightY = y;
+    let bottomX = x + size / 2, bottomY = y + size / 2;
 
-    // Dibujamos la cara frontal (roja)
     ctx.fillStyle = "#ff4d4d";
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -46,7 +41,6 @@ function drawIsoCube(x, y, size) {
     ctx.fill();
     ctx.stroke();
 
-    // Dibujamos la cara lateral (oscura)
     ctx.fillStyle = "#cc0000";
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -57,7 +51,6 @@ function drawIsoCube(x, y, size) {
     ctx.fill();
     ctx.stroke();
 
-    // Dibujamos la cara superior (más clara)
     ctx.fillStyle = "#ff6666";
     ctx.beginPath();
     ctx.moveTo(topX, topY);
@@ -69,7 +62,7 @@ function drawIsoCube(x, y, size) {
     ctx.stroke();
 }
 
-// Renderiza todos los cubos en pantalla
+// Renderiza los cubos
 function drawBlocks() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     blocks.forEach(block => {
@@ -77,12 +70,12 @@ function drawBlocks() {
     });
 }
 
-// Temporizador de 15 segundos con sincronización
+// Inicia el temporizador
 function startTimer() {
     timeLeft = 15;
     document.getElementById("timer").innerText = `Tiempo: ${timeLeft}s`;
 
-    if (timerInterval) clearInterval(timerInterval); // Evita múltiples temporizadores
+    if (timerInterval) clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -96,20 +89,35 @@ function startTimer() {
     }, 1000);
 }
 
-// Inicia una nueva ronda del juego
-function startGame() {
-    gameRunning = true;
-    createBlocks();
-    drawBlocks();
-    startTimer();
+// Genera seis opciones de respuesta con un botón correcto aleatorio
+function generateAnswerButtons() {
+    const buttonContainer = document.getElementById("buttonContainer");
+    buttonContainer.innerHTML = "";
+    
+    let possibleAnswers = new Set();
+    while (possibleAnswers.size < 6) {
+        possibleAnswers.add(Math.floor(Math.random() * 13) + 6);
+    }
+    let answersArray = Array.from(possibleAnswers);
+    
+    if (!answersArray.includes(blockCount)) {
+        answersArray[Math.floor(Math.random() * 6)] = blockCount;
+    }
+
+    answersArray.forEach(num => {
+        let button = document.createElement("button");
+        button.innerText = num;
+        button.classList.add("option-button");
+        button.onclick = () => checkAnswer(num);
+        buttonContainer.appendChild(button);
+    });
 }
 
-// Verifica la respuesta del usuario
-document.getElementById("checkAnswer").addEventListener("click", function() {
+// Verifica la respuesta
+function checkAnswer(selectedNumber) {
     if (!gameRunning) return;
 
-    let userGuess = parseInt(document.getElementById("userInput").value);
-    if (userGuess === blockCount) {
+    if (selectedNumber === blockCount) {
         score++;
         document.getElementById("score").innerText = `Puntos: ${score}`;
         document.getElementById("result").innerText = "¡Correcto! 🚀 Nueva ronda...";
@@ -119,7 +127,16 @@ document.getElementById("checkAnswer").addEventListener("click", function() {
         gameRunning = false;
         clearInterval(timerInterval);
     }
-});
+}
 
-// Inicia la primera ronda
+// Inicia el juego
+function startGame() {
+    gameRunning = true;
+    createBlocks();
+    drawBlocks();
+    generateAnswerButtons();
+    startTimer();
+}
+
+// Inicia el juego al cargar la página
 startGame();
