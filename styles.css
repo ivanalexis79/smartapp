@@ -1,24 +1,57 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #222;
-    color: white;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-canvas {
-    background-color: #333;
-    display: block;
-    margin: 20px auto;
-    border: 2px solid white;
+h1 {
+    font-size: 1.8em;
+    margin: 15px 0;
 }
 
 p {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 1.2em;
 }
 
-input, button {
-    font-size: 18px;
-    margin: 10px;
-    padding: 10px;
+#gameCanvas {
+    width: 90vw;
+    height: auto;
+    max-width: 400px;
+    display: block;
+    margin: auto;
+    background-color: #ddd;
+    border: 2px solid #333;
+}
+
+#buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.option-button {
+    width: 45%;
+    height: 60px;
+    font-size: 1.5em;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option-button:hover {
+    background-color: #cc0000;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 1.3em;
+    font-weight: bold;
 }
