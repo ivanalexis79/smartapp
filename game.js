@@ -14,14 +14,19 @@ let timerInterval;
 function createBlocks() {
     blocks = [];
     blockCount = Math.floor(Math.random() * 13) + 6; 
+
+    let maxWidth = canvas.width - 60; // Ajuste para que no queden fuera
+    let startX = canvas.width / 2 - 50; // Centra los bloques
+
     for (let i = 0; i < blockCount; i++) {
         blocks.push({
-            x: 150 + Math.random() * 100 - 50, 
-            y: 250 - i * 20, 
+            x: Math.max(50, Math.min(startX + Math.random() * 100 - 50, maxWidth)), // Garantiza que queden dentro
+            y: canvas.height / 2 - i * 20, // Ajuste para evitar que queden demasiado altos
             size: 30
         });
     }
 }
+
 
 // Dibuja un cubo isométrico
 function drawIsoCube(x, y, size) {
